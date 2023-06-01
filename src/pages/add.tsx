@@ -34,37 +34,45 @@ const Add = () => {
 };
 
 const Button = styled.button`
-  background-color: white;
-  border: 1px solid black;
+  background-color: #2a2f4f;
   padding: 15px;
+  border-radius: 15px;
+  color: #e5beec;
+  transition: background-color 0.3s;
+  cursor: pointer;
+
+  &:hover {
+    background-color: #524b6e;
+  }
 `;
 
 const Label = styled.label`
-  color: black;
+  color: #2a2f4f;
 `;
 
 const Input = styled.input`
   background-color: transparent;
   padding: 5px;
   border-radius: 5px;
-  border: 1px solid black;
+  border: 1px solid #2a2f4f;
   min-width: 200px;
+  color: #2a2f4f;
 `;
 
 const Main = styled.main`
-  color: grey;
-  background-color: violet;
+  background-color: #e5beec;
   display: flex;
   padding: 20px;
   align-items: center;
   justify-content: center;
   flex-wrap: wrap;
   gap: 15px;
+  border-radius: 15px;
 `;
 
 const Container = styled.div`
   color: grey;
-  background-color: tomato;
+  background-color: #2a2f4f;
   height: 100vh;
   width: 100%;
   display: flex;

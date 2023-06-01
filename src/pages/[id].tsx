@@ -1,6 +1,6 @@
 import { Operator } from "@/types/types";
 import { GetStaticProps, InferGetStaticPropsType } from "next";
-import { useRouter } from "next/router";
+import router, { useRouter } from "next/router";
 import React, {
   ChangeEvent,
   ChangeEventHandler,
@@ -36,6 +36,17 @@ const OperatorPage = ({
     "default"
   );
   const router = useRouter();
+
+  const deleteOperator = async () => {
+    const res = await fetch(`http://localhost:3004/operators/${data.id}`, {
+      method: "DELETE",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+    });
+    router.back();
+  };
 
   const handlePriceChange = (e: ChangeEvent<HTMLInputElement>) => {
     setPrice(e?.target?.value);
@@ -93,13 +104,17 @@ const OperatorPage = ({
         <Button type="submit">Пополнить</Button>
         {isStatus === "error" && <Error>ОШИБКА</Error>}
         {isStatus === "succes" && <Succes>УСПЕШНО</Succes>}
+
+        <Button type="button" onClick={deleteOperator}>
+          Удалить оператора
+        </Button>
       </Form>
     </Container>
   );
 };
 
 const OperatorName = styled.h1`
-  color: black;
+  color: #2a2f4f;
   font-weight: bold;
 `;
 
@@ -114,13 +129,23 @@ const Error = styled.span`
 `;
 
 const Button = styled.button`
-  background-color: white;
+  background-color: #2a2f4f;
   border: 1px solid black;
   padding: 15px;
+  color: #e5beec;
+  border-radius: 15px;
+  transition: background-color 0.3s;
+  cursor: pointer;
+  height: 50px;
+  width: 200px;
+
+  &:hover {
+    background-color: #524b6e;
+  }
 `;
 
 const Label = styled.label`
-  color: black;
+  color: #2a2f4f;
 `;
 
 const Input = styled(InputMask)`
@@ -132,19 +157,18 @@ const Input = styled(InputMask)`
 `;
 
 const Container = styled.div`
-  color: grey;
-  background-color: tomato;
+  color: #2a2f4f;
+  background-color: #2a2f4f;
   height: 100vh;
   width: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 5px;
 `;
 
 const Form = styled.form`
-  color: grey;
-  background-color: violet;
+  color: #2a2f4f;
+  background-color: #e5beec;
   width: 70%;
   height: 50vh;
   display: flex;
@@ -154,6 +178,6 @@ const Form = styled.form`
   justify-content: center;
   flex-wrap: wrap;
   gap: 15px;
-  border-radius: 5px;
+  border-radius: 15px;
 `;
 export default OperatorPage;
