@@ -43,6 +43,11 @@ const FlexRow = styled.div`
 const H1 = styled.h1`
   color: #2a2f4f;
   padding-bottom: 15px;
+  transition: color 0.3s;
+
+  &:hover {
+    color: #524b6e;
+  }
 `;
 
 const Button = styled.button`
@@ -57,12 +62,6 @@ const Button = styled.button`
   font-size: 15px;
   border-radius: 15px;
   transition: background-color 0.3s;
-  opacity: 1;
-  transition: opacity 0.3s;
-
-  &.fade-in {
-    opacity: 0;
-  }
 
   &:hover {
     background-color: #524b6e;

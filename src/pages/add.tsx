@@ -28,6 +28,9 @@ const Add = () => {
         <Input id="NameOperator" value={name} onChange={handleNameChange} />
 
         <Button onClick={createOperator}>Добавить</Button>
+        <Button type="button" onClick={router.back}>
+          Назад
+        </Button>
       </Main>
     </Container>
   );
@@ -38,8 +41,9 @@ const Button = styled.button`
   padding: 15px;
   border-radius: 15px;
   color: #e5beec;
-  transition: background-color 0.3s;
   cursor: pointer;
+
+  transition: background-color 0.3s;
 
   &:hover {
     background-color: #524b6e;

@@ -108,6 +108,9 @@ const OperatorPage = ({
         <Button type="button" onClick={deleteOperator}>
           Удалить оператора
         </Button>
+        <Button type="button" onClick={router.back}>
+          Назад
+        </Button>
       </Form>
     </Container>
   );
