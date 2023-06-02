@@ -38,6 +38,7 @@ const OperatorPage = ({
   const router = useRouter();
 
   const deleteOperator = async () => {
+    // удалить оператора
     const res = await fetch(`http://localhost:3004/operators/${data.id}`, {
       method: "DELETE",
       headers: {
