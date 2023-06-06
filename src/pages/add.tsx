@@ -6,12 +6,12 @@ import uniqid from "uniqid";
 const Add = () => {
   const router = useRouter();
   const [name, setName] = useState("");
-  console.log(name);
   const handleNameChange = (e: ChangeEvent<HTMLInputElement>) => {
     setName(e?.target?.value);
   };
-  const createOperator = async () => {
-    const res = await fetch(`http://localhost:3004/operators`, {
+  const createOperator = async (e: React.SyntheticEvent) => {
+    e.preventDefault();
+    await fetch(`http://localhost:3004/operators`, {
       method: "POST",
       headers: {
         Accept: "application/json",
@@ -23,15 +23,20 @@ const Add = () => {
   };
   return (
     <Container>
-      <Main>
+      <Form onSubmit={createOperator}>
         <Label htmlFor="NameOperator">Введите название:</Label>
-        <Input id="NameOperator" value={name} onChange={handleNameChange} />
+        <Input
+          required
+          id="NameOperator"
+          value={name}
+          onChange={handleNameChange}
+        />
 
-        <Button onClick={createOperator}>Добавить</Button>
+        <Button type="submit">Добавить</Button>
         <Button type="button" onClick={router.back}>
           Назад
         </Button>
-      </Main>
+      </Form>
     </Container>
   );
 };
@@ -63,7 +68,7 @@ const Input = styled.input`
   color: #2a2f4f;
 `;
 
-const Main = styled.main`
+const Form = styled.form`
   background-color: #e5beec;
   display: flex;
   padding: 20px;

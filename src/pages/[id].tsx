@@ -1,4 +1,4 @@
-import { Operator } from "@/types/types";
+import { Operator, Statuses } from "@/types/types";
 import { GetStaticProps, InferGetStaticPropsType } from "next";
 import router, { useRouter } from "next/router";
 import React, {
@@ -32,13 +32,11 @@ const OperatorPage = ({
 }: InferGetStaticPropsType<typeof getStaticProps>) => {
   const [phone, setPhone] = useState("");
   const [price, setPrice] = useState("");
-  const [isStatus, setIsStatus] = useState<"succes" | "error" | "default">(
-    "default"
-  );
+  const [status, setStatus] = useState(Statuses.DEFAULT);
   const router = useRouter();
 
   const deleteOperator = async () => {
-    const res = await fetch(`http://localhost:3004/operators/${data.id}`, {
+    await fetch(`http://localhost:3004/operators/${data.id}`, {
       method: "DELETE",
       headers: {
         Accept: "application/json",
@@ -57,22 +55,23 @@ const OperatorPage = ({
   const handleSubmit = (e: React.SyntheticEvent) => {
     e.preventDefault();
     const random = Math.floor(Math.random() * 100);
+    setStatus(Statuses.LOADING);
     setTimeout(() => {
       if (random > 50) {
-        setIsStatus("succes");
+        setStatus(Statuses.SUCCESS);
       } else if (random <= 50) {
-        setIsStatus("error");
+        setStatus(Statuses.ERROR);
       }
-    });
+    }, 1000);
   };
 
   useEffect(() => {
-    if (isStatus === "succes") {
+    if (status === Statuses.SUCCESS) {
       setTimeout(() => {
         router.back();
       }, 1000);
     }
-  }, [isStatus, router]);
+  }, [status, router]);
 
   return (
     <Container>
@@ -86,6 +85,7 @@ const OperatorPage = ({
           value={phone}
           onChange={handlePhoneChange}
           placeholder="Введите номер"
+          required
         />
 
         <Label htmlFor="price">Сумма:</Label>
@@ -101,14 +101,29 @@ const OperatorPage = ({
           required
         />
 
-        <Button type="submit">Пополнить</Button>
-        {isStatus === "error" && <Error>ОШИБКА</Error>}
-        {isStatus === "succes" && <Succes>УСПЕШНО</Succes>}
+        <Button disabled={status === Statuses.LOADING} type="submit">
+          Пополнить
+        </Button>
+        {status === Statuses.ERROR && <Status status={status}>ОШИБКА</Status>}
+        {status === Statuses.SUCCESS && (
+          <Status status={status}>УСПЕШНО</Status>
+        )}
+        {status === Statuses.LOADING && (
+          <Status status={status}>ЗАГРУЗКА</Status>
+        )}
 
-        <Button type="button" onClick={deleteOperator}>
+        <Button
+          disabled={status === Statuses.LOADING}
+          type="button"
+          onClick={deleteOperator}
+        >
           Удалить оператора
         </Button>
-        <Button type="button" onClick={router.back}>
+        <Button
+          disabled={status === Statuses.LOADING}
+          type="button"
+          onClick={router.back}
+        >
           Назад
         </Button>
       </Form>
@@ -121,13 +136,13 @@ const OperatorName = styled.h1`
   font-weight: bold;
 `;
 
-const Succes = styled.span`
-  color: green;
-  font-weight: bold;
-`;
-
-const Error = styled.span`
-  color: red;
+const Status = styled.span<{ status: Statuses }>`
+  color: ${({ status }) =>
+    status === Statuses.SUCCESS
+      ? "green"
+      : status === Statuses.ERROR
+      ? "red"
+      : "blue"};
   font-weight: bold;
 `;
 
@@ -141,6 +156,11 @@ const Button = styled.button`
   cursor: pointer;
   height: 50px;
   width: 200px;
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: default;
+  }
 
   &:hover {
     background-color: #524b6e;
